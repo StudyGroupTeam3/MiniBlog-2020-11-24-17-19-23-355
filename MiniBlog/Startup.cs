@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MiniBlog.Services;
 using MiniBlog.Stores;
 
 namespace MiniBlog
@@ -30,6 +31,7 @@ namespace MiniBlog
             services.AddSwaggerGen();
             services.AddScoped<IArticleStore, ArticleStore>();
             services.AddScoped<IUserStore, UserStore>();
+            services.AddScoped<UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
