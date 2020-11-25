@@ -66,11 +66,12 @@ namespace MiniBlogTest.ControllerTest
         public async Task Should_register_user_fail_when_UserStore_unavailable()
         {
             Mock<IUserStore> moqUserStore = new Mock<IUserStore>();
+            moqUserStore.Setup(mock => mock.Users).Throws<Exception>();
             var client = Factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
-                    services.AddScoped<IUserStore, TestUserStore>((serviceProvider) => { return new TestUserStore(); });
+                    services.AddScoped<IUserStore>((serviceProvider) => { return moqUserStore.Object; });
                 });
             }).CreateClient();
 
