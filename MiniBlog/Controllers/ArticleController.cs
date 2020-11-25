@@ -16,13 +16,13 @@ namespace MiniBlog.Controllers
     {
         private readonly IArticleStore articleStore;
         private readonly UserService userService;
-        private readonly IUserStore userStore;
+        private readonly ArticleService articleService;
 
-        public ArticleController(IArticleStore articleStore, UserService userService, IUserStore userStore)
+        public ArticleController(IArticleStore articleStore, UserService userService, ArticleService articleService)
         {
             this.articleStore = articleStore;
             this.userService = userService;
-            this.userStore = userStore;
+            this.articleService = articleService;
         }
 
         [HttpGet]
@@ -46,8 +46,7 @@ namespace MiniBlog.Controllers
         [HttpGet("{id}")]
         public Article GetById(Guid id)
         {
-            var foundArticle = articleStore.Articles.FirstOrDefault(article => article.Id == id);
-            return foundArticle;
+            return articleService.FoundArticle(id);
         }
     }
 }
