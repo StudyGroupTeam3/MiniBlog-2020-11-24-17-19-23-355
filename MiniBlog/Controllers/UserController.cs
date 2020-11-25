@@ -24,14 +24,13 @@ namespace MiniBlog.Controllers
         public async Task<ActionResult<User>> Create(User user)
         {
             userService.Register(user);
-
             return CreatedAtAction(nameof(GetByName), new { name = user.Name }, user);
         }
 
         [HttpGet]
         public List<User> GetAll()
         {
-            return UserStoreWillReplaceInFuture.Users;
+            return userService.GetAllUsers();
         }
 
         [HttpPut]

@@ -13,14 +13,17 @@ namespace MiniBlog.Services
         User FoundUserWhileUpdate(User user);
         User FoundUserWhileDelete(string name);
         User FoundUserByName(string name);
+        List<User> GetAllUsers();
     }
 
     public class UserService : IUserService
     {
         private IUserStore userStore;
-        public UserService(IUserStore userStore)
+        private IArticleStore articleStore;
+        public UserService(IUserStore userStore, IArticleStore articleStore)
         {
             this.userStore = userStore;
+            this.articleStore = articleStore;
         }
 
         public void Register(User user)
@@ -48,7 +51,7 @@ namespace MiniBlog.Services
             if (foundUser != null)
             {
                 userStore.Users.Remove(foundUser);
-                ArticleStoreWillReplaceInFuture.Articles.RemoveAll(a => a.UserName == foundUser.Name);
+                articleStore.Articles.RemoveAll(a => a.UserName == foundUser.Name);
             }
 
             return foundUser;
@@ -57,6 +60,11 @@ namespace MiniBlog.Services
         public User FoundUserByName(string name)
         {
             return userStore.Users.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
+        }
+
+        public List<User> GetAllUsers()
+        {
+            return userStore.Users;
         }
     }
 }

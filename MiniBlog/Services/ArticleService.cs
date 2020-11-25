@@ -11,6 +11,7 @@ namespace MiniBlog.Services
     {
         void Register(Article article);
         Article FoundArticleById(Guid id);
+        List<Article> GetArticleList();
     }
 
     public class ArticleService : IArticleService
@@ -40,6 +41,11 @@ namespace MiniBlog.Services
         {
             var foundArticle = articleStore.Articles.FirstOrDefault(article => article.Id == id);
             return foundArticle;
+        }
+
+        public List<Article> GetArticleList()
+        {
+            return articleStore.Articles.ToList();
         }
     }
 }
