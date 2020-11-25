@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using MiniBlog.Model;
@@ -21,14 +22,14 @@ namespace MiniBlog.Controllers
         }
 
         [HttpPost]
-        public User Register(User user)
+        public async Task<ActionResult<User>> Register(User user)
         {
             if (!userStore.Users.Exists(_ => user.Name.ToLower() == _.Name.ToLower()))
             {
                 userStore.Users.Add(user);
             }
 
-            return user;
+            return CreatedAtAction(nameof(GetByName), new { name = user.Name }, user);
         }
 
         [HttpGet]
