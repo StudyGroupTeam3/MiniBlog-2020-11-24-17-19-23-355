@@ -18,14 +18,6 @@ namespace MiniBlog.Stores
         }
     }
 
-    public class TestUser : IUser
-    {
-        public List<User> Users
-        {
-            get => throw new Exception();
-        }
-    }
-
     public class UserStoreWillReplaceInFuture
     {
         public UserStoreWillReplaceInFuture()
