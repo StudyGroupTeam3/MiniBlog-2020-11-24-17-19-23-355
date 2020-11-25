@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using MiniBlog;
 using MiniBlog.Model;
 using MiniBlog.Stores;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -38,14 +41,24 @@ namespace MiniBlogTest.ControllerTest
         [Fact]
         public async void Should_create_article_fail_when_ArticleStore_unavailable()
         {
-            // 每次都会创建IoC实例  (pull request的方式跑测试？？？, IIS ????）
+            // 每次都会创建IoC实例  (per-request的方式跑测试, IIS: web server）
+            Mock<IArticleStore> mockArticleStore = new Mock<IArticleStore>();
+            mockArticleStore.Setup(mock => mock.Articles).Throws<Exception>();
             var client = Factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
-                    services.AddScoped<IArticleStore, TestArticleStore>((serviceProvider) => { return new TestArticleStore(); });
+                    services.AddScoped<IArticleStore>((serviceProvider) => { return mockArticleStore.Object; });
                 });
             }).CreateClient();
+
+            //var client = Factory.WithWebHostBuilder(builder =>
+            //{
+            //    builder.ConfigureServices(services =>
+            //    {
+            //        services.AddScoped<IArticleStore, TestArticleStore>((serviceProvider) => { return new TestArticleStore(); });
+            //    });
+            //}).CreateClient();
 
             string userNameWhoWillAdd = "Tom";
             string articleContent = "What a good day today!";
