@@ -13,12 +13,10 @@ namespace MiniBlog.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserStore userStore;
         private readonly UserService userService;
 
-        public UserController(IUserStore userStore, UserService userService)
+        public UserController(UserService userService)
         {
-            this.userStore = userStore;
             this.userService = userService;
         }
 
@@ -33,38 +31,27 @@ namespace MiniBlog.Controllers
         [HttpGet]
         public List<User> GetAll()
         {
-            return UserStoreWillReplaceInFuture.Users;
+            return userService.GetAllUsers();
         }
 
         [HttpPut]
         public User Update(User user)
         {
-            var foundUser = UserStoreWillReplaceInFuture.Users.FirstOrDefault(_ => _.Name == user.Name);
-            if (foundUser != null)
-            {
-                foundUser.Email = user.Email;
-            }
-
-            return foundUser;
+            var foundUser = userService.GetUserByName(user.Name);
+            return userService.PatchUser(foundUser, user);
         }
 
         [HttpDelete]
         public User Delete(string name)
         {
-            var foundUser = UserStoreWillReplaceInFuture.Users.FirstOrDefault(_ => _.Name == name);
-            if (foundUser != null)
-            {
-                UserStoreWillReplaceInFuture.Users.Remove(foundUser);
-                ArticleStoreWillReplaceInFuture.Articles.RemoveAll(a => a.UserName == foundUser.Name);
-            }
-
-            return foundUser;
+            var foundUser = userService.GetUserByName(name);
+            return userService.DeleteUser(foundUser);
         }
 
         [HttpGet("{name}")]
         public User GetByName(string name)
         {
-            return UserStoreWillReplaceInFuture.Users.FirstOrDefault(_ => _.Name.ToLower() == name.ToLower());
+            return userService.GetUserByName(name);
         }
     }
 }
