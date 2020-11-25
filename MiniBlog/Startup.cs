@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MiniBlog.Stores;
 
 namespace MiniBlog
 {
@@ -25,8 +26,10 @@ namespace MiniBlog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers();   // Transition. Singleton, scope
             services.AddSwaggerGen();
+            services.AddSingleton<IArticleStore, ArticleStore>();
+            // services.AddSingleton<IArticleStore, TestArticleStore>(); // 有两个实现，一个是ArticleStore，一个是TestArticleStore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

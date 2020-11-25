@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using MiniBlog;
 using MiniBlog.Model;
 using MiniBlog.Stores;
@@ -37,7 +38,15 @@ namespace MiniBlogTest.ControllerTest
         [Fact]
         public async void Should_create_article_fail_when_ArticleStore_unavailable()
         {
-            var client = GetClient();
+            // 每次都会创建IoC实例  (pull request的方式跑测试？？？, IIS ????）
+            var client = Factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddSingleton<IArticleStore, TestArticleStore>((serviceProvider) => { return new TestArticleStore(); });
+                });
+            }).CreateClient();
+
             string userNameWhoWillAdd = "Tom";
             string articleContent = "What a good day today!";
             string articleTitle = "Good day";
@@ -64,7 +73,6 @@ namespace MiniBlogTest.ControllerTest
 
             // It fail, please help
             Assert.Equal(HttpStatusCode.Created, createArticleResponse.StatusCode);
-
             var articleResponse = await client.GetAsync("/article");
             var body = await articleResponse.Content.ReadAsStringAsync();
             var articles = JsonConvert.DeserializeObject<List<Article>>(body);

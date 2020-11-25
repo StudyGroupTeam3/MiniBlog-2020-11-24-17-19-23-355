@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using MiniBlog.Model;
@@ -12,14 +13,14 @@ namespace MiniBlog.Controllers
     public class UserController : ControllerBase
     {
         [HttpPost]
-        public User Register(User user)
+        public async Task<ActionResult<User>> Create(User user)
         {
             if (!UserStoreWillReplaceInFuture.Users.Exists(_ => user.Name.ToLower() == _.Name.ToLower()))
             {
                 UserStoreWillReplaceInFuture.Users.Add(user);
             }
 
-            return user;
+            return CreatedAtAction(nameof(GetByName), new { id = user.Name }, user);
         }
 
         [HttpGet]
