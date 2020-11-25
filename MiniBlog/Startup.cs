@@ -32,6 +32,7 @@ namespace MiniBlog
             services.AddScoped<IArticleStore, ArticleStore>();
             services.AddScoped<IUserStore, UserStore>();
             services.AddScoped<UserService>();
+            services.AddScoped<ArticleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -13,7 +13,7 @@ namespace MiniBlog.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private UserService userService;
+        private readonly UserService userService;
 
         public UserController(UserService userService)
         {
