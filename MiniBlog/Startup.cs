@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+//using MiniBlog.Services;
 using MiniBlog.Stores;
 
 namespace MiniBlog
@@ -29,6 +30,8 @@ namespace MiniBlog
             services.AddControllers();   // Transition. Singleton, scope
             services.AddSwaggerGen();
             services.AddScoped<IArticleStore, ArticleStore>();
+            services.AddScoped<IUserStore, UserStore>();  // 注册，在controller的构造函数中实现
+            //services.AddScoped<UserService>();
             // services.AddSingleton<IArticleStore, TestArticleStore>(); // 有两个实现，一个是ArticleStore，一个是TestArticleStore
         }
 

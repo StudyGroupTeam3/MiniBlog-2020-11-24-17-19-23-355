@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using MiniBlog.Model;
+//using MiniBlog.Services;
 using MiniBlog.Stores;
 
 namespace MiniBlog.Controllers
@@ -12,6 +13,13 @@ namespace MiniBlog.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
+        private IUserStore userStore;
+
+        public UserController(IUserStore userStore)
+        {
+            this.userStore = userStore;
+        }
+
         [HttpPost]
         public async Task<ActionResult<User>> Create(User user)
         {
@@ -19,6 +27,8 @@ namespace MiniBlog.Controllers
             {
                 UserStoreWillReplaceInFuture.Users.Add(user);
             }
+
+            userStore.Users.Add(user);
 
             return CreatedAtAction(nameof(GetByName), new { name = user.Name }, user);
         }
