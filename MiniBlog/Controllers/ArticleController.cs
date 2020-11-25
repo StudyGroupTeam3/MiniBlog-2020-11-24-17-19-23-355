@@ -32,7 +32,6 @@ namespace MiniBlog.Controllers
         public async Task<ActionResult<Article>> Create(Article article)
         {
             articleService.Register(article);
-
             return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
         }
 

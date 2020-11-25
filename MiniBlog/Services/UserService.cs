@@ -7,15 +7,6 @@ using MiniBlog.Stores;
 
 namespace MiniBlog.Services
 {
-    public interface IUserService
-    {
-        void Register(User user);
-        User FoundUserWhileUpdate(User user);
-        User FoundUserWhileDelete(string name);
-        User FoundUserByName(string name);
-        List<User> GetAllUsers();
-    }
-
     public class UserService : IUserService
     {
         private IUserStore userStore;
@@ -36,7 +27,7 @@ namespace MiniBlog.Services
 
         public User FoundUserWhileUpdate(User user)
         {
-            var foundUser = userStore.Users.FirstOrDefault(x => x.Name == user.Name);
+            var foundUser = FoundUserByNameWithCaseSensitive(user.Name);
             if (foundUser != null)
             {
                 foundUser.Email = user.Email;
@@ -47,7 +38,7 @@ namespace MiniBlog.Services
 
         public User FoundUserWhileDelete(string name)
         {
-            var foundUser = userStore.Users.FirstOrDefault(x => x.Name == name);
+            var foundUser = FoundUserByNameWithCaseSensitive(name);
             if (foundUser != null)
             {
                 userStore.Users.Remove(foundUser);
@@ -60,6 +51,11 @@ namespace MiniBlog.Services
         public User FoundUserByName(string name)
         {
             return userStore.Users.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
+        }
+
+        public User FoundUserByNameWithCaseSensitive(string name)
+        {
+            return userStore.Users.FirstOrDefault(x => x.Name == name);
         }
 
         public List<User> GetAllUsers()

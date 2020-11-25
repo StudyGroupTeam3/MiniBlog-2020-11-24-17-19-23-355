@@ -7,13 +7,6 @@ using MiniBlog.Stores;
 
 namespace MiniBlog.Services
 {
-    public interface IArticleService
-    {
-        void Register(Article article);
-        Article FoundArticleById(Guid id);
-        List<Article> GetArticleList();
-    }
-
     public class ArticleService : IArticleService
     {
         private IUserStore userStore;
