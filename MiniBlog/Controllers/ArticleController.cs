@@ -36,11 +36,7 @@ namespace MiniBlog.Controllers
         {
             if (article.UserName != null)
             {
-                if (!userStore.Users.Exists(_ => article.UserName == _.Name))
-                {
-                    userStore.Users.Add(new User(article.UserName));
-                }
-
+                userService.Register(new User(article.UserName));
                 articleStore.Articles.Add(article);
             }
 
