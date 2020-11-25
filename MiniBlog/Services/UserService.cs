@@ -17,6 +17,11 @@ namespace MiniBlog.Services
             this.userStore = userStore;
         }
 
+        public User FindUserByName(string name)
+        {
+            return userStore.Users.FirstOrDefault(_ => _.Name.ToLower() == name.ToLower());
+        }
+
         public void Register(User user)
         {
             if (FindUserByName(user.Name) is null)
@@ -34,11 +39,6 @@ namespace MiniBlog.Services
             }
 
             return foundUser;
-        }
-
-        private User FindUserByName(string name)
-        {
-            return userStore.Users.FirstOrDefault(_ => _.Name.ToLower() == name.ToLower());
         }
     }
 }
