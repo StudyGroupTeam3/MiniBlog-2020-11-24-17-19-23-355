@@ -39,8 +39,7 @@ namespace MiniBlog.Controllers
         [HttpGet("{id}")]
         public Article GetById(Guid id)
         {
-            var foundArticle = ArticleStoreWillReplaceInFuture.Articles.FirstOrDefault(article => article.Id == id);
-            return foundArticle;
+            return articleService.FoundArticleById(id);
         }
     }
 }
