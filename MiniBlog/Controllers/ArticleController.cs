@@ -20,7 +20,7 @@ namespace MiniBlog.Controllers
         }
 
         [HttpPost]
-        public Article Create(Article article)
+        public async Task<ActionResult<Action>> Create(Article article)
         {
             if (article.UserName != null)
             {
@@ -32,7 +32,9 @@ namespace MiniBlog.Controllers
                 ArticleStoreWillReplaceInFuture.Articles.Add(article);
             }
 
-            return article;
+            //IArticleStore articleStore = new TestArticleStore();
+            //articleStore.Articles.Add(article);
+            return CreatedAtAction(nameof(GetById), new { id = article.Id }, article);
         }
 
         [HttpGet("{id}")]

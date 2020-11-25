@@ -6,7 +6,7 @@ namespace MiniBlog.Stores
 {
     public class UserStoreWillReplaceInFuture
     {
-        public UserStoreWillReplaceInFuture()
+        static UserStoreWillReplaceInFuture()
         {
             Users = new List<User>();
         }

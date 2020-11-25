@@ -4,9 +4,30 @@ using MiniBlog.Model;
 
 namespace MiniBlog.Stores
 {
+    public interface IArticleStore
+    {
+        List<Article> Articles { get; }
+    }
+
+    public class ArticleStore : IArticleStore
+    {
+        public List<Article> Articles
+        {
+            get
+            {
+                return ArticleStoreWillReplaceInFuture.Articles;
+            }
+        }
+    }
+
+    public class TestArticleStore : IArticleStore
+    {
+        public List<Article> Articles => throw new Exception();
+    }
+
     public class ArticleStoreWillReplaceInFuture
     {
-        public ArticleStoreWillReplaceInFuture()
+        static ArticleStoreWillReplaceInFuture()
         {
             Init();
         }
