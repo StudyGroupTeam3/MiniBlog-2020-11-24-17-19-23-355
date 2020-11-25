@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MiniBlog;
 using MiniBlog.Model;
 using MiniBlog.Stores;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -38,11 +40,13 @@ namespace MiniBlogTest.ControllerTest
         [Fact]
         public async void Should_create_article_fail_when_ArticleStore_unavailable()
         {
+            Mock<IArticleStore> moqArticleStore = new Mock<IArticleStore>();
+            moqArticleStore.Setup(mock => mock.Articles).Throws<Exception>();
             var client = Factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
-                    services.AddSingleton<IArticleStore, TestArticleStore>((serviceProvider) => { return new TestArticleStore(); });
+                    services.AddScoped<IArticleStore>((serviceProvider) => { return moqArticleStore.Object; });
                 });
             }).CreateClient();
             string userNameWhoWillAdd = "Tom";

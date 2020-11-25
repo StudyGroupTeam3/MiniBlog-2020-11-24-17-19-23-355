@@ -22,7 +22,7 @@ namespace MiniBlog.Controllers
         [HttpGet]
         public List<Article> List()
         {
-            return ArticleStoreWillReplaceInFuture.Articles.ToList();
+            return articleStore.Articles.ToList();
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@ namespace MiniBlog.Controllers
         {
             if (article.UserName != null)
             {
-                if (!UserStoreWillReplaceInFuture.Users.Exists(_ => article.UserName == _.Name))
+                if (!UserStoreWillReplaceInFuture.Users.Exists(user => article.UserName == user.Name))
                 {
                     UserStoreWillReplaceInFuture.Users.Add(new User(article.UserName));
                 }
