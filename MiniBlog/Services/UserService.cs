@@ -11,10 +11,12 @@ namespace MiniBlog.Services
     public class UserService
     {
         private IUserStore userStore;
+        private IArticleStore articleStore;
 
-        public UserService(IUserStore userStore)
+        public UserService(IUserStore userStore, IArticleStore articleStore)
         {
             this.userStore = userStore;
+            this.articleStore = articleStore;
         }
 
         public User FindUserByName(string name)
@@ -36,6 +38,18 @@ namespace MiniBlog.Services
             if (!(foundUser is null))
             {
                 foundUser.Email = user.Email;
+            }
+
+            return foundUser;
+        }
+
+        public User DeleteUser(string name)
+        {
+            var foundUser = FindUserByName(name);
+            if (!(foundUser is null))
+            {
+                userStore.Users.Remove(foundUser);
+                articleStore.Articles.RemoveAll(a => a.UserName == foundUser.Name);
             }
 
             return foundUser;
