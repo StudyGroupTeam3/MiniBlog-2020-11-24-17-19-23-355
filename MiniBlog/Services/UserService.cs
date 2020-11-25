@@ -5,9 +5,9 @@ namespace MiniBlog.Services
 {
     public class UserService
     {
-        private readonly IUser userStore;
+        private readonly IUserStore userStore;
 
-        public UserService(IUser userStore)
+        public UserService(IUserStore userStore)
         {
             this.userStore = userStore;
         }

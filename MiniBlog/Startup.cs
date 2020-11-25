@@ -32,7 +32,7 @@ namespace MiniBlog
 
             // add
             services.AddScoped<IArticleStore, ArticleStore>();
-            services.AddScoped<IUser, ValidUser>();
+            services.AddScoped<IUserStore, UserStore>();
             services.AddScoped<UserService>();
         }
 

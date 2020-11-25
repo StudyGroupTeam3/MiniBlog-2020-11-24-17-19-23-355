@@ -5,12 +5,12 @@ using MiniBlog.Model;
 
 namespace MiniBlog.Stores
 {
-    public interface IUser
+    public interface IUserStore
     {
         List<User> Users { get; }
     }
 
-    public class ValidUser : IUser
+    public class UserStore : IUserStore
     {
         public List<User> Users
         {
