@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,12 @@ namespace MiniBlog.Controllers
     public class ArticleController : ControllerBase
     {
         private IArticleStore articleStore;
+        private IUserStore userStore;
 
-        public ArticleController(IArticleStore articleStore)
+        public ArticleController(IArticleStore articleStore, IUserStore userStore)
         {
             this.articleStore = articleStore;
+            this.userStore = userStore;
         }
 
         [HttpGet]
@@ -31,13 +34,11 @@ namespace MiniBlog.Controllers
         {
             if (article.UserName != null)
             {
-                if (!UserStoreWillReplaceInFuture.Users.Exists(_ => article.UserName == _.Name))
+                if (!UserStoreWillReplaceInFuture.Users.Exists(x => article.UserName == x.Name))
                 {
-                    UserStoreWillReplaceInFuture.Users.Add(new User(article.UserName));
+                    userStore.Users.Add(new User(article.UserName));
                 }
 
-                // ArticleStoreWillReplaceInFuture.Articles.Add(article);
-                // IArticleStore articleStore = new TestArticleStore();
                 articleStore.Articles.Add(article);
             }
 

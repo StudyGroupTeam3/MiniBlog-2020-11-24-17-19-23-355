@@ -23,13 +23,11 @@ namespace MiniBlog.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Create(User user)
         {
-            if (!UserStoreWillReplaceInFuture.Users.Exists(_ => user.Name.ToLower() == _.Name.ToLower()))
+            if (!UserStoreWillReplaceInFuture.Users.Exists(x => user.Name.ToLower() == x.Name.ToLower()))
             {
-                UserStoreWillReplaceInFuture.Users.Add(user);
+                userStore.Users.Add(user);
             }
-
-            userStore.Users.Add(user);
-
+            
             return CreatedAtAction(nameof(GetByName), new { name = user.Name }, user);
         }
 

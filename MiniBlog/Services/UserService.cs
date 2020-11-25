@@ -7,13 +7,19 @@ using MiniBlog.Stores;
 
 //namespace MiniBlog.Services
 //{
-//    public class UserService
+//    public interface IUserService
 //    {
+//        void Register(User user);
+//    }
 
-//        //public  void RegisterByName(User user)
-//        //if (!UserStoreWillReplaceInFuture.Users.Exists(_ => user.Name.ToLower() == _.Name.ToLower()))
-//        //{
-//        //    UserStoreWillReplaceInFuture.Users.Add(user);
-//        //}
-//}
+//    public class UserService : IUserService
+//    {
+//        public void Register(User user)
+//        {
+//            if (!UserStoreWillReplaceInFuture.Users.Exists(x => user.Name.ToLower() == x.Name.ToLower()))
+//            {
+//                UserStoreWillReplaceInFuture.Users.Add(user);
+//            }
+//        }
+//    }
 //}
