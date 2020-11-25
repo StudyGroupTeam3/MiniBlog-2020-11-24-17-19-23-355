@@ -29,6 +29,7 @@ namespace MiniBlog
             services.AddControllers();
             services.AddSwaggerGen();
             services.AddSingleton<IArticleStore, ArticleStore>();
+            services.AddSingleton<IUserStore, UserStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

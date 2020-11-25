@@ -13,6 +13,13 @@ namespace MiniBlog.Controllers
     [Route("[controller]")]
     public class ArticleController : ControllerBase
     {
+        private IArticleStore iArticleStore;
+
+        public ArticleController(IArticleStore iArticleStore)
+        {
+            this.iArticleStore = iArticleStore;
+        }
+
         [HttpGet]
         public List<Article> List()
         {
@@ -29,7 +36,7 @@ namespace MiniBlog.Controllers
                     UserStoreWillReplaceInFuture.Users.Add(new User(article.UserName));
                 }
 
-                ArticleStoreWillReplaceInFuture.Articles.Add(article);
+                iArticleStore.Articles.Add(article);
             }
 
             //IArticleStore articleStore = new TestArticleStore();
