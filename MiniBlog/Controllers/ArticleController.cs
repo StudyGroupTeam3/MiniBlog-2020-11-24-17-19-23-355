@@ -14,19 +14,17 @@ namespace MiniBlog.Controllers
     [Route("[controller]")]
     public class ArticleController : ControllerBase
     {
-        private IArticleStore articleStore;
         private ArticleService articleService;
 
-        public ArticleController(IArticleStore articleStore, ArticleService articleService)
+        public ArticleController(ArticleService articleService)
         {
-            this.articleStore = articleStore;
             this.articleService = articleService;
         }
 
         [HttpGet]
         public List<Article> List()
         {
-            return articleStore.Articles.ToList();
+            return articleService.GetAllArticles();
         }
 
         [HttpPost]

@@ -20,6 +20,11 @@ namespace MiniBlog.Services
             this.userService = userService;
         }
 
+        public List<Article> GetAllArticles()
+        {
+            return articleStore.Articles.ToList();
+        }
+
         public Article FindArticleByID(Guid id)
         {
             return articleStore.Articles.FirstOrDefault(article => article.Id == id);
