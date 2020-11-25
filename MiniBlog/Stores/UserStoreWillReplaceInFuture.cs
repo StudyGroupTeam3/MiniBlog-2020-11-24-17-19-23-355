@@ -1,9 +1,31 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components.Server;
 using MiniBlog.Model;
 
 namespace MiniBlog.Stores
 {
+    public interface IUser
+    {
+        List<User> Users { get; }
+    }
+
+    public class ValidUser : IUser
+    {
+        public List<User> Users
+        {
+            get => UserStoreWillReplaceInFuture.Users;
+        }
+    }
+
+    public class TestUser : IUser
+    {
+        public List<User> Users
+        {
+            get => throw new Exception();
+        }
+    }
+
     public class UserStoreWillReplaceInFuture
     {
         public UserStoreWillReplaceInFuture()
