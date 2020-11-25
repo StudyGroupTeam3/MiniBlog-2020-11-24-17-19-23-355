@@ -20,6 +20,11 @@ namespace MiniBlog.Services
             this.userService = userService;
         }
 
+        public Article FindArticleByID(Guid id)
+        {
+            return articleStore.Articles.FirstOrDefault(article => article.Id == id);
+        }
+
         public void AddArticle(Article article)
         {
             if (article.UserName != null)
