@@ -10,6 +10,9 @@ namespace MiniBlog.Services
     public interface IUserService
     {
         void Register(User user);
+        User FoundUserWhileUpdate(User user);
+        User FoundUserWhileDelete(string name);
+        User FoundUserByName(string name);
     }
 
     public class UserService : IUserService
@@ -26,6 +29,34 @@ namespace MiniBlog.Services
             {
                 userStore.Users.Add(user);
             }
+        }
+
+        public User FoundUserWhileUpdate(User user)
+        {
+            var foundUser = userStore.Users.FirstOrDefault(x => x.Name == user.Name);
+            if (foundUser != null)
+            {
+                foundUser.Email = user.Email;
+            }
+
+            return foundUser;
+        }
+
+        public User FoundUserWhileDelete(string name)
+        {
+            var foundUser = userStore.Users.FirstOrDefault(x => x.Name == name);
+            if (foundUser != null)
+            {
+                userStore.Users.Remove(foundUser);
+                ArticleStoreWillReplaceInFuture.Articles.RemoveAll(a => a.UserName == foundUser.Name);
+            }
+
+            return foundUser;
+        }
+
+        public User FoundUserByName(string name)
+        {
+            return userStore.Users.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
         }
     }
 }
