@@ -19,10 +19,26 @@ namespace MiniBlog.Services
 
         public void Register(User user)
         {
-            if (!userStore.Users.Exists(_ => user.Name.ToLower() == _.Name.ToLower()))
+            if (FindUserByName(user.Name) is null)
             {
                 userStore.Users.Add(user);
             }
+        }
+
+        public User UpdateUser(User user)
+        {
+            var foundUser = FindUserByName(user.Name);
+            if (!(foundUser is null))
+            {
+                foundUser.Email = user.Email;
+            }
+
+            return foundUser;
+        }
+
+        private User FindUserByName(string name)
+        {
+            return userStore.Users.FirstOrDefault(_ => _.Name.ToLower() == name.ToLower());
         }
     }
 }
