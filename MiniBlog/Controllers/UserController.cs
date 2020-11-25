@@ -11,6 +11,13 @@ namespace MiniBlog.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
+        private IArticleStore articleStore;
+
+        public UserController(IArticleStore articleStore)
+        {
+            this.articleStore = articleStore;
+        }
+
         [HttpPost]
         public User Register(User user)
         {
@@ -47,7 +54,7 @@ namespace MiniBlog.Controllers
             if (foundUser != null)
             {
                 UserStoreWillReplaceInFuture.Users.Remove(foundUser);
-                ArticleStoreWillReplaceInFuture.Articles.RemoveAll(a => a.UserName == foundUser.Name);
+                articleStore.Articles.RemoveAll(a => a.UserName == foundUser.Name);
             }
 
             return foundUser;
