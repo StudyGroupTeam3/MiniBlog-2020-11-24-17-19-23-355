@@ -13,28 +13,24 @@ namespace MiniBlog.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private IArticleStore articleStore;
-        private IUserStore userStore;
         private UserService userService;
 
-        public UserController(IArticleStore articleStore, IUserStore userStore, UserService userService)
+        public UserController(UserService userService)
         {
-            this.articleStore = articleStore;
-            this.userStore = userStore;
             this.userService = userService;
         }
 
         [HttpPost]
         public async Task<ActionResult<User>> Register(User user)
         {
-            userService.Register(user);
+            userService.RegisterUser(user);
             return CreatedAtAction(nameof(GetByName), new { name = user.Name }, user);
         }
 
         [HttpGet]
         public List<User> GetAll()
         {
-            return userStore.Users;
+            return userService.GetAllUsers();
         }
 
         [HttpPut]

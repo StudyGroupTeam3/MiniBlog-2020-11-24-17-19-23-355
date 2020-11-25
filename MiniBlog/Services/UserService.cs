@@ -19,12 +19,17 @@ namespace MiniBlog.Services
             this.articleStore = articleStore;
         }
 
+        public List<User> GetAllUsers()
+        {
+            return userStore.Users;
+        }
+
         public User FindUserByName(string name)
         {
             return userStore.Users.FirstOrDefault(_ => _.Name.ToLower() == name.ToLower());
         }
 
-        public void Register(User user)
+        public void RegisterUser(User user)
         {
             if (FindUserByName(user.Name) is null)
             {
