@@ -32,6 +32,7 @@ namespace MiniBlog
             services.AddScoped<IArticleStore, ArticleStore>();
             services.AddScoped<IUserStore, UserStore>();  // 注册，在controller的构造函数中实现
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IArticleService, ArticleService>();
             // services.AddSingleton<IArticleStore, TestArticleStore>(); // 有两个实现，一个是ArticleStore，一个是TestArticleStore
         }
 
