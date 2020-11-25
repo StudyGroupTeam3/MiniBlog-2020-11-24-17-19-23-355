@@ -1,4 +1,5 @@
-﻿using MiniBlog.Model;
+﻿using System.Linq;
+using MiniBlog.Model;
 using MiniBlog.Stores;
 
 namespace MiniBlog.Services
@@ -18,6 +19,16 @@ namespace MiniBlog.Services
             {
                 userStore.Users.Add(user);
             }
+        }
+
+        public User FountUser(string name)
+        {
+            return userStore.Users.FirstOrDefault(_ => _.Name == name || _.Name.ToLower() == name.ToLower());
+        }
+
+        public User FountUser(User user)
+        {
+            return userStore.Users.FirstOrDefault(_ => _.Name == user.Name);
         }
     }
 }

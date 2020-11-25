@@ -15,10 +15,12 @@ namespace MiniBlog.Controllers
     {
         private readonly UserService userService;
         private readonly IUserStore userStore;
-        public UserController(IUserStore userStore, UserService userService)
+        private readonly IArticleStore articleStore;
+        public UserController(IUserStore userStore, UserService userService, IArticleStore articleStore)
         {
             this.userService = userService;
             this.userStore = userStore;
+            this.articleStore = articleStore;
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace MiniBlog.Controllers
         [HttpPut]
         public User Update(User user)
         {
-            var foundUser = userStore.Users.FirstOrDefault(_ => _.Name == user.Name);
+            var foundUser = userService.FountUser(user);
             if (foundUser != null)
             {
                 foundUser.Email = user.Email;
@@ -50,11 +52,11 @@ namespace MiniBlog.Controllers
         [HttpDelete]
         public User Delete(string name)
         {
-            var foundUser = userStore.Users.FirstOrDefault(_ => _.Name == name);
+            var foundUser = userService.FountUser(name);
             if (foundUser != null)
             {
                 userStore.Users.Remove(foundUser);
-                ArticleStoreWillReplaceInFuture.Articles.RemoveAll(a => a.UserName == foundUser.Name);
+                articleStore.Articles.RemoveAll(a => a.UserName == foundUser.Name);
             }
 
             return foundUser;
@@ -63,7 +65,7 @@ namespace MiniBlog.Controllers
         [HttpGet("{name}")]
         public User GetByName(string name)
         {
-            return userStore.Users.FirstOrDefault(_ => _.Name.ToLower() == name.ToLower());
+            return userService.FountUser(name);
         }
     }
 }
