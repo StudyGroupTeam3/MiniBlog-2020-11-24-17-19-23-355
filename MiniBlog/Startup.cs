@@ -28,7 +28,7 @@ namespace MiniBlog
         {
             services.AddControllers();   // Transition. Singleton, scope
             services.AddSwaggerGen();
-            services.AddSingleton<IArticleStore, ArticleStore>();
+            services.AddScoped<IArticleStore, ArticleStore>();
             // services.AddSingleton<IArticleStore, TestArticleStore>(); // 有两个实现，一个是ArticleStore，一个是TestArticleStore
         }
 

@@ -20,7 +20,7 @@ namespace MiniBlog.Controllers
                 UserStoreWillReplaceInFuture.Users.Add(user);
             }
 
-            return CreatedAtAction(nameof(GetByName), new { id = user.Name }, user);
+            return CreatedAtAction(nameof(GetByName), new { name = user.Name }, user);
         }
 
         [HttpGet]
