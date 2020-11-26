@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MiniBlog.Model;
 using MiniBlog.Stores;
 
@@ -7,10 +8,17 @@ namespace MiniBlog.Services
     public class UserService
     {
         private readonly IUserStore userStore;
+        private readonly IArticleStore articleStore;
 
-        public UserService(IUserStore userStore)
+        public UserService(IUserStore userStore, IArticleStore articleStore)
         {
             this.userStore = userStore;
+            this.articleStore = articleStore;
+        }
+
+        public List<User> GetAllUsers()
+        {
+            return userStore.Users;
         }
 
         public void Register(User user)
@@ -21,14 +29,32 @@ namespace MiniBlog.Services
             }
         }
 
-        public User FountUser(string name)
+        public User FoundUserByName(string name)
         {
-            return userStore.Users.FirstOrDefault(_ => _.Name == name || _.Name.ToLower() == name.ToLower());
+            return userStore.Users.FirstOrDefault(_ => _.Name == name);
         }
 
-        public User FountUser(User user)
+        public User DeleteUser(string name)
         {
-            return userStore.Users.FirstOrDefault(_ => _.Name == user.Name);
+            var foundUser = FoundUserByName(name);
+            if (foundUser != null)
+            {
+                userStore.Users.Remove(foundUser);
+                articleStore.Articles.RemoveAll(article => article.UserName == foundUser.Name);
+            }
+
+            return foundUser;
+        }
+
+        public User UpdateUser(User user)
+        {
+            var foundUser = FoundUserByName(user.Name);
+            if (foundUser != null)
+            {
+                foundUser.Email = user.Email;
+            }
+
+            return foundUser;
         }
     }
 }
