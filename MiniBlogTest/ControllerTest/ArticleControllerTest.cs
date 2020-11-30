@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MiniBlog;
 using MiniBlog.Model;
 using MiniBlog.Stores;
+using Moq;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -38,18 +40,15 @@ namespace MiniBlogTest.ControllerTest
         [Fact]
         public async void Should_create_article_fail_when_ArticleStore_unavailable()
         {
+            Mock<IArticleStore> mockArticleStore = new Mock<IArticleStore>();
+            mockArticleStore.Setup(mock => mock.Articles).Throws<Exception>();
             var client = Factory.WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
-                    services.AddScoped<IArticleStore, TestArticleStore>(serviceProvider =>
-                    {
-                        return new TestArticleStore();
-                    });
+                    services.AddScoped<IArticleStore>((serviceProvider) => mockArticleStore.Object);
                 });
             }).CreateClient();
-
-            //var client = GetClient();
             string userNameWhoWillAdd = "Tom";
             string articleContent = "What a good day today!";
             string articleTitle = "Good day";
@@ -74,7 +73,6 @@ namespace MiniBlogTest.ControllerTest
             StringContent content = new StringContent(httpContent, Encoding.UTF8, MediaTypeNames.Application.Json);
             var createArticleResponse = await client.PostAsync("/article", content);
 
-            // It fail, please help
             Assert.Equal(HttpStatusCode.Created, createArticleResponse.StatusCode);
 
             var articleResponse = await client.GetAsync("/article");
